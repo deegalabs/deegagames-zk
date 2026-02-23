@@ -2606,6 +2606,10 @@ header {
   font-size: 0.9rem;
 }
 .lobby-empty span { font-size: 2.5rem; }
+.lobby-empty-hint { font-size: 0.8rem; opacity: 0.9; margin-top: 4px; }
+.lobby-empty code { font-size: 0.75rem; background: var(--bg-2); padding: 2px 6px; border-radius: 4px; }
+.lobby-empty-debug { margin-top: 12px; font-size: 0.7rem; opacity: 0.75; color: var(--muted); }
+.lobby-empty-err { color: var(--red, #f87171); word-break: break-all; }
 
 /* ── Table cards ── */
 .lobby-tables-grid {

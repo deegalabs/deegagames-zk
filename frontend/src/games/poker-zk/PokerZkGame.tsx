@@ -4,7 +4,7 @@ import { ChatPanel } from '@/components/ChatPanel';
 import { PokerZkService, GameState, Action, getMyHoleCardsFromGame } from './pokerZkService';
 const normalizeState = PokerZkService.normalizeState;
 import { useWallet } from '@/hooks/useWallet';
-import { POKER_ZK_CONTRACT } from '@/utils/constants';
+import { POKER_ZK_CONTRACT, RPC_URL } from '@/utils/constants';
 import type { Game, Table, WaitingSession } from './bindings';
 import { Buffer } from 'buffer';
 
@@ -121,6 +121,7 @@ export function PokerZkGame({
   const [openGames, setOpenGames] = useState<Array<{ gameId: bigint; game: Game }>>([]);
   const [tables, setTables] = useState<TableRow[]>([]);
   const [loadingTables, setLoadingTables] = useState(false);
+  const [tablesLoadError, setTablesLoadError] = useState<string | null>(null);
   const [loadingOpenGames, setLoadingOpenGames] = useState(false);
   const [config, setConfig] = useState<{ waiting_timeout: bigint } | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -233,6 +234,7 @@ export function PokerZkGame({
   const refreshTables = useCallback(async () => {
     if (gameId) return;
     setLoadingTables(true);
+    setTablesLoadError(null);
     try {
       const count = await pokerZkService.getTableCount();
       const list: TableRow[] = [];
@@ -252,8 +254,10 @@ export function PokerZkGame({
         }
       }
       setTables(list);
-    } catch {
+    } catch (e) {
       setTables([]);
+      const msg = e instanceof Error ? e.message : String(e);
+      setTablesLoadError(msg);
     } finally {
       setLoadingTables(false);
     }
@@ -670,7 +674,22 @@ export function PokerZkGame({
           {tables.length === 0 && !loadingTables && (
             <div className="lobby-empty">
               <span>🎴</span>
-              <p>No tables found or contract not deployed.</p>
+              {!POKER_ZK_CONTRACT || POKER_ZK_CONTRACT.trim() === '' ? (
+                <>
+                  <p>Contract not configured.</p>
+                  <p className="lobby-empty-hint">Set <code>VITE_POKER_ZK_CONTRACT_ID</code> in your environment and redeploy.</p>
+                </>
+              ) : (
+                <>
+                  <p>No tables found or contract not deployed.</p>
+                  <p className="lobby-empty-hint">Ensure the contract is deployed on this network (e.g. Testnet) and <code>VITE_SOROBAN_RPC_URL</code> points to the same network.</p>
+                </>
+              )}
+              <div className="lobby-empty-debug" aria-hidden="true">
+                <p>Contract: {POKER_ZK_CONTRACT ? `${POKER_ZK_CONTRACT.slice(0, 8)}…${POKER_ZK_CONTRACT.slice(-4)}` : '(not set)'}</p>
+                <p>RPC: {RPC_URL ? new URL(RPC_URL).hostname : '(default)'}</p>
+                {tablesLoadError && <p className="lobby-empty-err">Error: {tablesLoadError}</p>}
+              </div>
             </div>
           )}
 
