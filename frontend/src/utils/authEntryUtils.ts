@@ -21,7 +21,7 @@ export function getCredentialTypeAndAddress(creds: unknown): { type: string; add
   try {
     const addr = c.address();
     const scAddr = addr?.address?.();
-    const addressString = scAddr != null ? Address.fromScAddress(scAddr).toString() : '';
+    const addressString = scAddr != null ? Address.fromScAddress(scAddr as xdr.ScAddress).toString() : '';
     if (!addressString) return null;
     return { type: 'sorobanCredentialsAddress', addressString };
   } catch {

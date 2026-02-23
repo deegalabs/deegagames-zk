@@ -137,14 +137,14 @@ export class PokerZkService {
     if (typeof raw === 'string') {
       const n = Number(raw);
       if (!Number.isNaN(n)) return n;
-      const idx = (GameState as Record<string, number>)[raw];
+      const idx = (GameState as unknown as Record<string, number>)[raw];
       if (typeof idx === 'number') return idx;
       return undefined;
     }
     const obj = raw as { value?: number; name?: string };
     if (typeof obj?.value === 'number') return obj.value;
-    if (typeof obj?.name === 'string' && typeof (GameState as Record<string, number>)[obj.name] === 'number') {
-      return (GameState as Record<string, number>)[obj.name];
+    if (typeof obj?.name === 'string' && typeof (GameState as unknown as Record<string, number>)[obj.name] === 'number') {
+      return (GameState as unknown as Record<string, number>)[obj.name];
     }
     return undefined;
   }
@@ -397,9 +397,8 @@ export class PokerZkService {
     const updatedTx = await injectSignedAuthEntry(tx, player1AuthEntryXDR, player2, player2Signer);
     // Assinar e enviar a própria tx (já simulada e com auth injectada). O inject substitui entradas sem .switch() por XDR válido.
     const sent = await updatedTx.signAndSend({
-      signTransaction: player2Signer.signTransaction,
-      signAuthEntry: player2Signer.signAuthEntry,
-    });
+      ...player2Signer,
+    } as contract.ClientOptions);
     console.log(LOG, 'Import Auth Entry: ok', { result: sent?.result != null ? 'ok' : 'null' });
     return sent?.result ?? sent;
   }
@@ -417,9 +416,8 @@ export class PokerZkService {
     const assembled = client.txFromXDR(fullySignedTxXDR);
     const validUntil = await calculateValidUntilLedger(RPC_URL, DEFAULT_AUTH_TTL_MINUTES);
     const sent = await assembled.signAndSend({
-      signTransaction: player2Signer.signTransaction,
-      signAuthEntry: player2Signer.signAuthEntry,
-    });
+      ...player2Signer,
+    } as contract.ClientOptions);
     return sent?.result ?? sent;
   }
 
