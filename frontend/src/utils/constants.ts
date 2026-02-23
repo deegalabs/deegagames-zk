@@ -24,9 +24,10 @@ function contractEnvKey(crateName: string): string {
 
 export function getContractId(crateName: string): string {
   const runtimeId = runtimeConfig?.contractIds?.[crateName];
-  if (runtimeId) return runtimeId;
+  if (runtimeId) return typeof runtimeId === 'string' ? runtimeId.trim() : runtimeId;
   const env = import.meta.env as unknown as Record<string, string>;
-  return env[contractEnvKey(crateName)] || '';
+  const raw = env[contractEnvKey(crateName)] || '';
+  return typeof raw === 'string' ? raw.trim() : raw;
 }
 
 export function getAllContractIds(): Record<string, string> {
@@ -43,11 +44,13 @@ export function getAllContractIds(): Record<string, string> {
   for (const [key, value] of Object.entries(env)) {
     if (!key.startsWith('VITE_') || !key.endsWith('_CONTRACT_ID')) continue;
     if (!value) continue;
+    const trimmed = typeof value === 'string' ? value.trim() : value;
+    if (!trimmed) continue;
 
     const envKey = key.slice('VITE_'.length, key.length - '_CONTRACT_ID'.length);
     const crateName = envKey.toLowerCase().replace(/_/g, '-');
     if (!out[crateName]) {
-      out[crateName] = value;
+      out[crateName] = trimmed;
     }
   }
 
