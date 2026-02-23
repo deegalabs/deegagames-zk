@@ -1,0 +1,33 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500;600&family=Rye&display=swap");
+@import "./styles/deegalabs.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+#root {
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+/* Override card/notice for App.tsx when not in poker */
+.card {
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px 28px;
+  color: var(--text);
+}
+.notice {
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+.notice.error { color: #ff6b6b; border-color: rgba(255,107,107,0.3); }
+.notice.success { color: var(--green); border-color: var(--border-hi); }
+.notice.info { color: var(--cyan); border-color: rgba(0,212,255,0.2); }
+.gradient-text { color: var(--green); }

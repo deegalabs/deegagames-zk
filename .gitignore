@@ -1,0 +1,41 @@
+# Rust / Cargo
+/target/
+**/*.rs.bk
+Cargo.lock
+
+# Node / frontend
+node_modules/
+frontend/node_modules/
+*.local
+.env
+.env.*
+!.env.example
+
+# Build outputs
+frontend/dist/
+frontend/dist-node/
+frontend/tsconfig.tsbuildinfo
+*.wasm
+*.wasm.*
+circuits/**/target/
+
+# Noir
+circuits/**/contract/
+circuits/**/verifier/
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Deployment (optional: commit example)
+deployment.json
+
+# temp files
+temp/

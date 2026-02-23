@@ -1,0 +1,8 @@
+[package]
+name = "hand_ranker"
+type = "bin"
+compiler_version = ">=0.28.0"
+description = "Prove correct hand rank (1-10) for hole + board. See CIRCUITS_SPEC §3."
+entry = "src/main.nr"
+
+[dependencies]

@@ -1,0 +1,7 @@
+# Example inputs for hand_validator — run: nargo prove
+# Commitment = hole_cards[0] + hole_cards[1] * 53 (binding map for [1,52])
+# Example: hole_cards [14, 27] => 14 + 27*53 = 1445
+
+hole_cards = [14, 27]
+board = [23, 22, 21, 7, 2]
+commitment = "1445"

@@ -1,0 +1,9 @@
+# Example inputs for hand_ranker — run: nargo prove
+# commitment = hole_cards[0] + hole_cards[1]*53 (same as hand_validator)
+# Example: hole_cards [14, 27] => 14 + 27*53 = 1445
+
+hole_cards = [14, 27]
+board = [23, 22, 21, 7, 2]
+# Board has three 7s => three of a kind = rank 4
+claimed_rank = 4
+commitment = "1445"

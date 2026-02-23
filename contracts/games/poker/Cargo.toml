@@ -1,0 +1,16 @@
+[package]
+name = "poker-game-manager"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "Poker ZK (Texas Hold'em) game logic — state machine, act(), Game Hub integration"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+doctest = false
+
+[dependencies]
+soroban-sdk = { workspace = true }
+
+[dev-dependencies]
+soroban-sdk = { workspace = true, features = ["testutils"] }
