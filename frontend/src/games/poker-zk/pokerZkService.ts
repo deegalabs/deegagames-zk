@@ -166,7 +166,7 @@ export class PokerZkService {
     }
   }
 
-  /** Get number of tables (ids 0..count-1). Returns 0 if method missing (old contract). */
+  /** Get number of tables (ids 0..count-1). Returns 0 if method missing (old contract). Throws on RPC/network error so caller can show it. */
   async getTableCount(): Promise<bigint> {
     try {
       const tx = await this.baseClient.get_table_count();
@@ -177,32 +177,32 @@ export class PokerZkService {
         return n > 0n ? n : 0n;
       }
       return 0n;
-    } catch {
-      return 0n;
+    } catch (e) {
+      throw e;
     }
   }
 
-  /** Get table by id (blinds, limits, max_seats). */
+  /** Get table by id (blinds, limits, max_seats). Returns null if missing. Throws on RPC/network error. */
   async getTable(tableId: bigint): Promise<Table | null> {
     try {
       const tx = await this.baseClient.get_table({ table_id: tableId });
       const result = await tx.simulate();
       if (result.result?.isOk?.()) return result.result.unwrap();
       return null;
-    } catch {
-      return null;
+    } catch (e) {
+      throw e;
     }
   }
 
-  /** Get waiting session for table (1/2). Returns null when 0/2. */
+  /** Get waiting session for table (1/2). Returns null when 0/2. Throws on RPC/network error. */
   async getTableWaiting(tableId: bigint): Promise<WaitingSession | null> {
     try {
       const tx = await this.baseClient.get_table_waiting({ table_id: tableId });
       const result = await tx.simulate();
       if (result.result?.isOk?.()) return result.result.unwrap();
       return null;
-    } catch {
-      return null;
+    } catch (e) {
+      throw e;
     }
   }
 
